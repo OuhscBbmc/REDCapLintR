@@ -1,0 +1,11 @@
+rules:
+  - name: variable name cannot be versioned.
+    description: variables should not be implicitly versioned with the variable name
+    rationale: The names are typically ambiguous, or it indicates you should be using a longitudinal/repeating instrument
+    example_bad: "`name_first_v1`"
+    rule_pass:
+      '      function (field_name) {
+        !grepl("^.+v\d", field_name, perl = TRUE)
+
+      }
+      '
