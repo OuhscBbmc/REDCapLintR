@@ -13,11 +13,10 @@ BugReports: https://github.com/OuhscBbmc/REDCapLintR/issues
 Depends:
     R (>= 4.1)
 Imports:
-    cli,
     glue,
     lifecycle,
     rlang (>= 1.1.0),
-    withr
+    tibble
 Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
