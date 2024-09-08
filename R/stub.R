@@ -1,0 +1,3 @@
+stub <- function() {
+  TRUE
+}
