@@ -16,5 +16,5 @@ Imports:
     lifecycle,
     rlang,
     withr
-URL: https://github.com/OuhscBbmc/REDCapLintR
+URL: https://github.com/OuhscBbmc/REDCapLintR, https://ouhscbbmc.github.io/REDCapLintR/
 BugReports: https://github.com/OuhscBbmc/REDCapLintR/issues
