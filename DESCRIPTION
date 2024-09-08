@@ -14,7 +14,7 @@ Imports:
     cli,
     glue,
     lifecycle,
-    rlang,
+    rlang (>= 1.1.0),
     withr
 URL: https://github.com/OuhscBbmc/REDCapLintR, https://ouhscbbmc.github.io/REDCapLintR/
 BugReports: https://github.com/OuhscBbmc/REDCapLintR/issues
