@@ -8,6 +8,15 @@
 \description{
 It examines a REDCap project's dictionary to identifies and reports potential problems.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/OuhscBbmc/REDCapLintR}
+  \item \url{https://ouhscbbmc.github.io/REDCapLintR/}
+  \item Report bugs at \url{https://github.com/OuhscBbmc/REDCapLintR/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Will Beasley \email{wibeasley@hotmail.com} (\href{https://orcid.org/0000-0002-5613-5006}{ORCID})
 
