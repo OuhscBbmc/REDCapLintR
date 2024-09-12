@@ -198,6 +198,15 @@ check_validation_phone_label <- function (d) { # d = d_metadata
     dplyr::pull(pass)
 }
 
+check_boolean_radio <- function (d) { # d = d_metadata
+  # medium priority
+  simple_boolean <- "0, No | 1, Yes"
+  fail <- d$select_choices_or_calculations == simple_boolean
+  fail <- dplyr::coalesce(fail, FALSE)
+  !fail
+
+}
+
 # load_checks2 <- function() {
   d_metadata <-
     read_metadata() #|>
@@ -206,5 +215,6 @@ check_validation_phone_label <- function (d) { # d = d_metadata
   check_v_name(d_metadata)
   check_validation_phone_variable(d_metadata)
   check_validation_phone_label(d_metadata)
+  check_boolean_radio(d_metadata)
   # rules_all   <- load_rules(  checks)
 # }
