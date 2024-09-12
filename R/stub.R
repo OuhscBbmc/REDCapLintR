@@ -146,21 +146,56 @@ load_rules <- function(checks) {
 check_v_name <- function (d) {
   # medium priority
   d$field_name |>
-    grepl(pattern = "^.+_v\\d$", x = _, perl = TRUE)
+    grepl(pattern = "^.+_v\\d$", x = _, perl = TRUE) |>
+    {\(fail)
+      !fail
+
+    }()
 }
 check_validation_phone_variable <- function (d) { # d = d_metadata
   # medium priority
   tokens <- c("phone", "cell", "mobile")
   pattern <- paste(tokens, collapse = "|")
-  d$field_name |>
-    stringi::stri_detect_regex(pattern = pattern)
+  d |>
+    dplyr::select(
+      field_name,
+      text_validation_type_or_show_slider_number,
+    ) |>
+    dplyr::mutate(
+      .columns_requring_validation = grepl(x = field_name, pattern = pattern),
+      .good_validation = text_validation_type_or_show_slider_number == "phone",
+      .good_validation = dplyr::coalesce(.good_validation, FALSE),
+      pass =
+        dplyr::if_else(
+          .columns_requring_validation,
+          .good_validation,
+          TRUE,
+        )
+    ) |>
+    dplyr::pull(pass)
 }
+
 check_validation_phone_label <- function (d) { # d = d_metadata
   # medium priority
   tokens <- c("phone", "cell", "mobile")
   pattern <- paste(tokens, collapse = "|")
-  d$field_label |>
-    stringi::stri_detect_regex(pattern = pattern)
+  d |>
+    dplyr::select(
+      field_label,
+      text_validation_type_or_show_slider_number,
+    ) |>
+    dplyr::mutate(
+      .columns_requring_validation = grepl(x = field_label, pattern = pattern),
+      .good_validation = text_validation_type_or_show_slider_number == "phone",
+      .good_validation = dplyr::coalesce(.good_validation, FALSE),
+      pass =
+        dplyr::if_else(
+          .columns_requring_validation,
+          .good_validation,
+          TRUE,
+        )
+    ) |>
+    dplyr::pull(pass)
 }
 
 # load_checks2 <- function() {
@@ -169,7 +204,7 @@ check_validation_phone_label <- function (d) { # d = d_metadata
     # degrade_v_name()
 
   check_v_name(d_metadata)
-  check_phone_variable(d_metadata)
+  check_validation_phone_variable(d_metadata)
   check_validation_phone_label(d_metadata)
   # rules_all   <- load_rules(  checks)
 # }
