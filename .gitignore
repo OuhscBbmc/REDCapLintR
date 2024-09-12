@@ -48,3 +48,6 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 docs
+
+# Specific to REDCapLintR
+inst/test-data/project-simple/.~lock.dictionary.csv#

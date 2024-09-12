@@ -144,16 +144,32 @@ load_rules <- function(checks) {
 }
 
 check_v_name <- function (d) {
+  # medium priority
   d$field_name |>
     grepl(pattern = "^.+_v\\d$", x = _, perl = TRUE)
 }
+check_validation_phone_variable <- function (d) { # d = d_metadata
+  # medium priority
+  tokens <- c("phone", "cell", "mobile")
+  pattern <- paste(tokens, collapse = "|")
+  d$field_name |>
+    stringi::stri_detect_regex(pattern = pattern)
+}
+check_validation_phone_label <- function (d) { # d = d_metadata
+  # medium priority
+  tokens <- c("phone", "cell", "mobile")
+  pattern <- paste(tokens, collapse = "|")
+  d$field_label |>
+    stringi::stri_detect_regex(pattern = pattern)
+}
 
-load_checks2 <- function() {
+# load_checks2 <- function() {
   d_metadata <-
     read_metadata() #|>
     # degrade_v_name()
 
   check_v_name(d_metadata)
-
+  check_phone_variable(d_metadata)
+  check_validation_phone_label(d_metadata)
   # rules_all   <- load_rules(  checks)
-}
+# }
