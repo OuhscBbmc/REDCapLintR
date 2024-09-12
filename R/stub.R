@@ -78,10 +78,69 @@ read_metadata <- function() {
   ds_metadata <- convert_dictionary_to_metadata(ds_dictionary)
 }
 
-degrade_v_name <- function(d_metadata) {
-  d_metadata$field_name[1] <- paste0(d_metadata$field_name[1], "_v1")
+# degrade_v_name <- function(d_metadata) {
+#   d_metadata$field_name[1] <- paste0(d_metadata$field_name[1], "_v1")
+#
+#   d_metadata
+# }
 
-  d_metadata
+convert_equation <- function(equation, check_name) {
+  tryCatch({
+    eval(parse(text = equation))
+  }, error = function(e) {
+    stop("Problem parsing the equation for smell `", check_name, "`.\n", e)
+  })
+}
+load_checks <- function() {
+  path_checks <- system.file("checks.yml", package = "REDCapLintR", mustWork = TRUE)
+
+  checkmate::assert_file_exists(path_checks, extension = c("yml", "yaml"))
+  checks <- yaml::read_yaml(path_checks)
+
+}
+
+fill_column <- function(.d, column_name) {
+  if (column_name %in% colnames(.d)) {
+    # Fill missing cells with TRUEs.
+    .d[[column_name]]   <- dplyr::coalesce(.d[[column_name]], TRUE)
+  } else {
+    # If the column doesn't exist at all, create it and fill with TRUEs.
+    .d[[column_name]]   <- TRUE
+  }
+
+  .d
+}
+
+load_rules <- function(checks) {
+  checkmate::assert_list(checks, any.missing = FALSE, null.ok = FALSE)
+
+   ds_rule_all <-
+    checks$rules |>
+    purrr::map_df(tibble::as_tibble) #|>
+    # fill_column("active") |>
+    # fill_column("debug")
+
+  # structure(
+  #   list(
+  #     github_file_prefix  = misc$github_file_prefix,
+  #     record_id_name      = misc$record_id_name,
+  #     record_id_link      = misc$record_id_link,
+  #     baseline_date_name  = misc$baseline_date_name,
+  #     redcap_project_id   = misc$redcap_project_id,
+  #     redcap_version      = misc$redcap_version,
+  #     redcap_default_arm  = misc$redcap_default_arm,
+  #     redcap_codebook     = misc$redcap_codebook,
+  #     redcap_record_link  = misc$redcap_record_link,
+  #
+  #     smells            = smells_all$smells,
+  #     smells_inactive   = smells_all$smells_inactive,
+  #     smell_names_md    = smells_all$smell_names_md,
+  #
+  #     rules             = rules_all$rules,
+  #     rules_inactive    = rules_all$rules_inactive
+  #   ),
+  #   class = "trawler_checks_definition"
+  # )
 }
 
 check_v_name <- function (d) {
@@ -89,16 +148,12 @@ check_v_name <- function (d) {
     grepl(pattern = "^.+_v\\d$", x = _, perl = TRUE)
 }
 
-read_checks <- function() {
-  path_checks <- system.file("checks.yml", package = "REDCapLintR", mustWork = TRUE)
-  checks <- yaml::read_yaml(path_checks)
-
+load_checks2 <- function() {
   d_metadata <-
-    read_metadata() |>
-    degrade_v_name()
+    read_metadata() #|>
+    # degrade_v_name()
+
   check_v_name(d_metadata)
 
-
-
-
+  # rules_all   <- load_rules(  checks)
 }
