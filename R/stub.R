@@ -204,9 +204,44 @@ check_boolean_radio <- function (d) { # d = d_metadata
   fail <- d$select_choices_or_calculations == simple_boolean
   fail <- dplyr::coalesce(fail, FALSE)
   !fail
+}
+f <- function(df) {
+  browser()
+  strsplit(df$select_choices_or_calculations, "|", fixed  = TRUE)
+}
+check_boolean_reverse <- function (d) { # d = d_metadata
+  tokens <- c("0, Yes", "0, No")
+  # b <-
+  d |>
+    dplyr::select(
+      field_name,
+      select_choices_or_calculations,
+    ) |>
+    tidyr::nest(
+      data = select_choices_or_calculations,
+      .by = field_name
+    ) |>
+    dplyr::mutate(
+      # a =
+      #   lapply(
+      #     data,
+      #     f
+      #   )
+      a =
+        purrr::map(
+          data,
+          f
+        )
+    ) #|>
+    # tidyr::(a)
+
 
 }
-
+e <-
+d_metadata$select_choices_or_calculations[19] |>
+  strsplit("|", fixed  = TRUE) |>
+  tibble::tibble(d = _)
+e[[1]][[1]]
 # load_checks2 <- function() {
   d_metadata <-
     read_metadata() #|>
